@@ -1,0 +1,64 @@
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| acpatildb          |
+| acpcjava           |
+| acppriject         |
+| acpproject         |
+| bookstore          |
+| car_show_room      |
+| information_schema |
+| mysql              |
+| nike               |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+13 rows in set (0.06 sec)
+
+mysql> use car_show_room;
+Database changed
+mysql> show tables;
++-------------------------+
+| Tables_in_car_show_room |
++-------------------------+
+| cars                    |
+| customers               |
+| sales                   |
++-------------------------+
+3 rows in set (0.10 sec)
+
+mysql> select * from cars;
++--------+--------------------------+---------+---------+------+
+| car_id | model                    | make    | price   | year |
++--------+--------------------------+---------+---------+------+
+|      1 | Porsche 356 BCarrera GTL | Abarth  | 1147785 | 1961 |
+|      2 | AC 378 GT Zagato         | AC Cars | 9181448 | 2012 |
++--------+--------------------------+---------+---------+------+
+2 rows in set (0.03 sec)
+
+mysql> select * from customers;
++--------+------------------+------------------------+-------------+
+| cus_id | name             | email                  | phone       |
++--------+------------------+------------------------+-------------+
+|      1 | Preeti Gugle     | guglepreeti@gmail.com  | 8424042234  |
+|      2 | Nitesh Sawant    | nitesh06@gmail.com     | 2967358964  |
+|      3 | Suraj Bhatkar    | bhatsurajj@gmail.com   | 9671385236  |
+|      4 | Soham Pilankar   | Sohamp@gmail.com       | 2137896548  |
+|      5 | Tani Mahidik     | mahidiktani@gmail.com  | 4563278965  |
+|      6 | Prathamesh Gugle | prathumgugle@gmail.com | 36579456128 |
++--------+------------------+------------------------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from sales;
++---------+--------+--------+------------+
+| sale_id | car_id | cus_id | sale_date  |
++---------+--------+--------+------------+
+|       1 |      1 |      1 | 2003-08-23 |
+|       2 |      2 |      4 | 2001-05-18 |
+|       3 |      2 |      6 | 2002-06-26 |
++---------+--------+--------+------------+
+3 rows in set (0.00 sec)
