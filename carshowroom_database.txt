@@ -31,6 +31,40 @@ mysql> show tables;
 +-------------------------+
 3 rows in set (0.10 sec)
 
+mysql> desc cars;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| car_id | int          | NO   | PRI | NULL    | auto_increment |
+| model  | varchar(200) | YES  |     | NULL    |                |
+| make   | varchar(300) | YES  |     | NULL    |                |
+| price  | int          | YES  |     | NULL    |                |
+| year   | int          | YES  |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+5 rows in set (0.03 sec)
+
+mysql> desc customers;
++--------+-------------+------+-----+---------+----------------+
+| Field  | Type        | Null | Key | Default | Extra          |
++--------+-------------+------+-----+---------+----------------+
+| cus_id | int         | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(30) | YES  |     | NULL    |                |
+| email  | varchar(25) | YES  |     | NULL    |                |
+| phone  | varchar(15) | YES  |     | NULL    |                |
++--------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> desc sales;
++-----------+------+------+-----+---------+----------------+
+| Field     | Type | Null | Key | Default | Extra          |
++-----------+------+------+-----+---------+----------------+
+| sale_id   | int  | NO   | PRI | NULL    | auto_increment |
+| car_id    | int  | YES  | MUL | NULL    |                |
+| cus_id    | int  | YES  | MUL | NULL    |                |
+| sale_date | date | YES  |     | NULL    |                |
++-----------+------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
 mysql> select * from cars;
 +--------+--------------------------+---------+---------+------+
 | car_id | model                    | make    | price   | year |
