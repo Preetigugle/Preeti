@@ -23,7 +23,9 @@ public class ShowManagementSystem {
 				System.out.println("4. View Cars");
 				System.out.println("5. View Customers");
 				System.out.println("6. View Sales");
-				System.out.println("7. Exit");
+				System.out.println("7. Update Customer"); //  Update Customer option
+				System.out.println("8. Update Sales");
+				System.out.println("9. Exit");
 				System.out.println("Enter Operation number you want to perform:- ");
 				operation=sc.nextInt();
 				sc.nextLine();
@@ -49,14 +51,20 @@ public class ShowManagementSystem {
 					viewSales(connection);
 					break;
 				case 7:
-					System.out.println("Exiting Program.");
+					updateCustomers(connection, sc); // Call updateCustomer function
 					break;
+				case 8:
+					updateSales(connection, sc); // Call updateSales function
+					break;
+				case 9:
+					System.out.println("Exiting Program.");
+					break;;
 				default:
 					System.out.println("Invalid operation. Please enter a valid operation number.");
                     break;
 				}
 			} 
-			while (operation !=7);
+			while (operation !=9);
 		}
 		catch (ClassNotFoundException e) 
         {
@@ -212,6 +220,145 @@ public class ShowManagementSystem {
 	                String name = resultSet.getString("customer_name");
 	                String sale_date = resultSet.getString("sale_date");
 	                System.out.println("ID: " + id + ", Model: " + model + ", Name: " + name + ", Date: " + sale_date);
+	            }
+	        }
+	    }
+	private static void updateCustomers(Connection connection, Scanner sc) throws SQLException 
+	 {
+	        viewCustomers(connection); 
+	        System.out.print("Enter Customer ID to update: ");
+	        int cus_id = sc.nextInt();
+	        sc.nextLine(); 
+	        System.out.print("Enter new Name (leave blank to keep existing): ");
+	        String newName = sc.nextLine();
+	        System.out.print("Enter new Email (leave blank to keep existing): ");
+	        String newEmail = sc.nextLine();
+	        System.out.print("Enter new Phone (leave blank to keep existing): ");
+	        String newPhone = sc.nextLine();
+
+	        String updateSql = "UPDATE customers SET ";
+	        boolean hasChanges = false; 
+	        if (!newName.isEmpty()) 
+	        {
+	            updateSql += "name = ?, ";
+	            hasChanges = true;
+	        }
+	        if (!newEmail.isEmpty()) 
+	        {
+	            updateSql += "email = ?, ";
+	            hasChanges = true;
+	        }
+	        if (!newPhone.isEmpty()) 
+	        {
+	            updateSql += "phone = ?, ";
+	            hasChanges = true;
+	        }
+	        if (hasChanges) 
+	        {
+	            updateSql = updateSql.substring(0, updateSql.length() - 2);
+	        } 
+	        else 
+	        {
+	            System.out.println("No changes made.");
+	            return; // Exit if no changes
+	        }
+	        updateSql += " WHERE cus_id = ?"; 
+
+	        try (PreparedStatement updateStatement = connection.prepareStatement(updateSql)) {
+	            int index = 1;
+	            if (!newName.isEmpty()) 
+	            {
+	                updateStatement.setString(index++, newName);
+	            }
+	            if (!newEmail.isEmpty()) 
+	            {
+	                updateStatement.setString(index++, newEmail);
+	            }
+	            if (!newPhone.isEmpty()) 
+	            {
+	                updateStatement.setString(index++, newPhone);
+	            }
+	            updateStatement.setInt(index, cus_id);
+	            int rowsAffected = updateStatement.executeUpdate();
+	            if (rowsAffected > 0) 
+	            {
+	                System.out.println("CUSTOMER UPDATED SUCCESSFULLY!!");
+	            } 
+	            else 
+	            {
+	                System.out.println("FAILED TO UPDATE CUSTOMER.");
+	            }
+	        }
+	    }
+	 private static void updateSales(Connection connection, Scanner sc) throws SQLException 
+	 {
+	        viewSales(connection); 
+	        System.out.print("Enter Sale ID to update: ");
+	        int sale_id = sc.nextInt();
+	        sc.nextLine(); 
+	        viewCars(connection); 
+	        System.out.print("Enter new Car ID (leave blank to keep existing): ");
+	        String newCarIdStr = sc.nextLine();
+	        int newCarId = newCarIdStr.isEmpty() ? 0 : Integer.parseInt(newCarIdStr);
+	        viewCustomers(connection); 
+	        System.out.print("Enter new Customer ID (leave blank to keep existing): ");
+	        String newCustomerIdStr = sc.nextLine();
+	        int newCustomerId = newCustomerIdStr.isEmpty() ? 0 : Integer.parseInt(newCustomerIdStr);
+	        System.out.print("Enter new Sale Date (YYYY-MM-DD, leave blank to keep existing): ");
+	        String newSaleDate = sc.nextLine();
+
+	        String updateSql = "UPDATE sales SET ";
+	        boolean hasChanges = false;
+	        if (newCarId != 0) 
+	        {
+	            updateSql += "car_id = ?, ";
+	            hasChanges = true;
+	        }
+	        if (newCustomerId != 0) 
+	        {
+	            updateSql += "cus_id = ?, ";
+	            hasChanges = true;
+	        }
+	        if (!newSaleDate.isEmpty()) 
+	        {
+	            updateSql += "sale_date = ?, ";
+	            hasChanges = true;
+	        }
+	        if (hasChanges) 
+	        {
+	            updateSql = updateSql.substring(0, updateSql.length() - 2);
+	        } 
+	        else 
+	        {
+	            System.out.println("No changes made.");
+	            return; // Exit if no changes
+	        }
+	        updateSql += " WHERE sale_id = ?";
+
+	        try (PreparedStatement updateStatement = connection.prepareStatement(updateSql)) 
+	        {
+	            int index = 1;
+	            if (newCarId != 0) 
+	            {
+	                updateStatement.setInt(index++, newCarId);
+	            }
+	            if (newCustomerId != 0) 
+	            {
+	                updateStatement.setInt(index++, newCustomerId);
+	            }
+	            if (!newSaleDate.isEmpty()) 
+	            {
+	                updateStatement.setString(index++, newSaleDate);
+	            }
+	            updateStatement.setInt(index, sale_id);
+	            int rowsAffected = updateStatement.executeUpdate();
+	            if (rowsAffected > 0) 
+	            {
+	                System.out.println("SALE UPDATED SUCCESSFULLY!!");
+	            } 
+	            else 
+	            {
+	                System.out.println("FAILED TO UPDATE SALE.");
 	            }
 	        }
 	    }
